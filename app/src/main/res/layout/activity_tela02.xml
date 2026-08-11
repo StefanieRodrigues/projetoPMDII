@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#B1673AB7"
     android:orientation="vertical"
     tools:context=".tela02">
 
@@ -17,4 +18,9 @@
         android:theme="?attr/actionBarTheme"
         app:subtitle="Subtítulo"
         app:title="Título" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
