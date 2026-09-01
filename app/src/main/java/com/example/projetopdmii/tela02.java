@@ -1,5 +1,6 @@
 package com.example.projetopdmii;
 
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -32,6 +34,7 @@ public class tela02 extends AppCompatActivity implements MediaPlayer.OnCompletio
     private ArrayList<Playlist> lista;
     private CardView card1,card2, card3, card4, card5;
     private TextView textoMusicaSeleciona, textoMusicaTocando;
+    private ImageView imgPreview, imgNext;
 
 
 
@@ -77,6 +80,11 @@ public class tela02 extends AppCompatActivity implements MediaPlayer.OnCompletio
         textoMusicaSeleciona = findViewById(R.id.textView);
         textoMusicaTocando = findViewById(R.id.textView2);
 
+        imgPreview = findViewById(R.id.imageView);
+        imgPreview.setOnClickListener(this);
+        imgNext = findViewById(R.id.imageView7);
+        imgNext.setOnClickListener(this);
+
 
     }
 
@@ -86,24 +94,11 @@ public class tela02 extends AppCompatActivity implements MediaPlayer.OnCompletio
             finish();
         }
         if (id == R.id.id001) {
-            if (mediaPlayer == null) {
-               mediaPlayer = MediaPlayer.create(this, musica);
-               textoMusicaTocando.setText("Música tocando: "+lista.get(indiceLista).getNome());
-               mediaPlayer.setOnCompletionListener(this);
-               seekbar.setMax(mediaPlayer.getDuration());
-               handler.post(this);
-               mediaPlayer.start();
-            }else if (!mediaPlayer.isPlaying()){
-                mediaPlayer.start();
-            }
+           play();
 
         }
         if (id == R.id.id003){
-            if (mediaPlayer != null){
-                mediaPlayer.stop();
-                mediaPlayer.release();
-                mediaPlayer = null;
-            }
+            stop();
         }
         if (id == R.id.id002){
             if (mediaPlayer != null && mediaPlayer.isPlaying()){
@@ -120,9 +115,17 @@ public class tela02 extends AppCompatActivity implements MediaPlayer.OnCompletio
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
+        handler.removeCallbacks(this);
         mediaPlayer.release();
-        mediaPlayer = null;
+        this.mediaPlayer = null;
         seekbar.setProgress(0);
+        indiceLista ++;
+        if (indiceLista >= lista.size()){
+            indiceLista = 0;
+        }
+        textoMusicaSeleciona.setText("Música selecionada: "+lista.get(indiceLista).getNome());
+        stop();
+        play();
     }
 
     @Override
@@ -150,6 +153,29 @@ public class tela02 extends AppCompatActivity implements MediaPlayer.OnCompletio
             seekbar.postDelayed(this, 1000);
         }
     }
+
+    public void play (){
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, lista.get(indiceLista).getMusica());
+            textoMusicaTocando.setText("Música tocando: "+lista.get(indiceLista).getNome());
+            mediaPlayer.setOnCompletionListener(this);
+            seekbar.setMax(mediaPlayer.getDuration());
+            handler.post(this);
+            mediaPlayer.start();
+        }else if (!mediaPlayer.isPlaying()){
+            mediaPlayer.start();
+            handler.post(this);
+        }
+    }
+
+    public void stop(){
+        if (mediaPlayer != null){
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
 
     @Override
     public void onClick(View view) {
@@ -183,6 +209,23 @@ public class tela02 extends AppCompatActivity implements MediaPlayer.OnCompletio
             musica = lista.get(indiceLista).getMusica();
 
         }
-
+        if (view == imgPreview){
+            indiceLista --;
+            if (indiceLista <0){
+                indiceLista = lista.size()-1;
+            }
+            textoMusicaSeleciona.setText("Música selecionada: "+lista.get(indiceLista).getNome());
+            stop();
+            play();
+        }
+        if (view == imgNext){
+          indiceLista++;
+          if(indiceLista >= lista.size()){
+              indiceLista = 0;
+          }
+          textoMusicaSeleciona.setText("Música selecionada: "+lista.get(indiceLista).getNome());
+            stop();
+            play();
+        }
     }
 }
