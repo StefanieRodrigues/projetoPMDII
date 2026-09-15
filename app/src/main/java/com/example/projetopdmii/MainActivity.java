@@ -2,6 +2,7 @@ package com.example.projetopdmii;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
@@ -11,8 +12,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button btn;
+public class MainActivity extends AppCompatActivity implements  Runnable {
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +25,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        btn = findViewById(R.id.button);
-        btn.setOnClickListener(this);
+        handler = new Handler();
+        handler.postDelayed(this, 2000);
+
+
     }
 
+
+
     @Override
-    public void onClick(View view) {
-        startActivity( new Intent(this, tela02.class));
+    public void run() {
+         startActivity(new Intent(this, Tela03.class));
     }
 }

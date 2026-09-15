@@ -1,6 +1,5 @@
 package com.example.projetopdmii;
 
-import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -24,7 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 
-public class tela02 extends AppCompatActivity implements MediaPlayer.OnCompletionListener, SeekBar.OnSeekBarChangeListener, Runnable, View.OnClickListener {
+public class Tela02 extends AppCompatActivity implements MediaPlayer.OnCompletionListener, SeekBar.OnSeekBarChangeListener, Runnable, View.OnClickListener {
     private Toolbar toolbar;
     private MediaPlayer mediaPlayer;
     private SeekBar seekbar;
@@ -33,7 +31,7 @@ public class tela02 extends AppCompatActivity implements MediaPlayer.OnCompletio
     private int musica, indiceLista;
     private ArrayList<Playlist> lista;
     private CardView card1,card2, card3, card4, card5;
-    private TextView textoMusicaSeleciona, textoMusicaTocando;
+    private TextView textoMusicaSeleciona, textoMusicaTocando, placarTempoAtual, placarTempoRestante;
     private ImageView imgPreview, imgNext;
 
 
@@ -56,6 +54,7 @@ public class tela02 extends AppCompatActivity implements MediaPlayer.OnCompletio
         seekbar = findViewById(R.id.seekBar);
         seekbar.setOnSeekBarChangeListener(this);
         handler = new Handler();
+
 
 
 
@@ -85,7 +84,17 @@ public class tela02 extends AppCompatActivity implements MediaPlayer.OnCompletio
         imgNext = findViewById(R.id.imageView7);
         imgNext.setOnClickListener(this);
 
+        placarTempoAtual = findViewById(R.id.textView4);
+        placarTempoRestante = findViewById(R.id.textView3);
 
+
+    }
+    public String formatarTempo(int tempo){
+        int segundos = tempo/1000;
+        int minutos = segundos/60;
+        segundos = segundos%60;
+        String tempoFormatado = String.format("%02d:%02d", minutos, segundos);
+        return tempoFormatado;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -149,6 +158,11 @@ public class tela02 extends AppCompatActivity implements MediaPlayer.OnCompletio
     @Override
     public void run() {
         if (mediaPlayer!= null) {
+            int tempoAtual = mediaPlayer.getCurrentPosition();
+            int duracao = mediaPlayer.getDuration();
+            int tempoRestante = duracao - tempoAtual;
+            placarTempoAtual.setText(formatarTempo(tempoAtual));
+            placarTempoRestante.setText("-" + formatarTempo(tempoRestante));
             seekbar.setProgress(mediaPlayer.getCurrentPosition());
             seekbar.postDelayed(this, 1000);
         }
@@ -157,7 +171,11 @@ public class tela02 extends AppCompatActivity implements MediaPlayer.OnCompletio
     public void play (){
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer.create(this, lista.get(indiceLista).getMusica());
-            textoMusicaTocando.setText("Música tocando: "+lista.get(indiceLista).getNome());
+            //textoMusicaTocando.setText("Música tocando: "+lista.get(indiceLista).getNome());
+            toolbar.setTitle(lista.get(indiceLista).getNome());
+            int X = indiceLista;
+            X++;
+            toolbar.setSubtitle(Integer.toString(X)+" de " + Integer.toString(lista.size()));
             mediaPlayer.setOnCompletionListener(this);
             seekbar.setMax(mediaPlayer.getDuration());
             handler.post(this);
