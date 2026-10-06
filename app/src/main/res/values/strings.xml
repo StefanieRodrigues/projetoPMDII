@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ProjetoPDMII</string>
+    <string name="open">Abrir</string>
+    <string name="close">Fechar</string>
+    <string name="oi">Bem vindo a Tela Home</string>
+    <string name="nome">Sra Hihi</string>
+    <string name="email">hihi.jackson@alunos.ifsuldeminas.edu.br</string>
 </resources>

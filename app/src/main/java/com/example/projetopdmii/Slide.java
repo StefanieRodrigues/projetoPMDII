@@ -4,10 +4,7 @@ public class Slide {
     private String nome;
     private int imagem;
     private String texto;
-    private String getNome(String nome, int imagem) {
-        this.nome = nome;
-        this.imagem = imagem;
-    }
+
 
     public Slide(String nome, int imagem, String texto){
         this.nome = nome;
