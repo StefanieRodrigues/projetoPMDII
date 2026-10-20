@@ -28,12 +28,12 @@ public class TelaHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_tela_home);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.iddrawer), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.iddrawer3), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        drawerLayout = findViewById(R.id.iddrawer);
+        drawerLayout = findViewById(R.id.iddrawer3);
         navigationView = findViewById(R.id.idnavigation);
         toolbar = findViewById(R.id.toolbar2);
         toggler = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);

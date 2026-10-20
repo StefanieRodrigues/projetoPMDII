@@ -1,5 +1,7 @@
 package com.example.projetopdmii;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,12 +15,17 @@ import android.widget.TextView;
 
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
@@ -34,14 +41,19 @@ public class Tela02 extends AppCompatActivity implements MediaPlayer.OnCompletio
     private TextView textoMusicaSeleciona, textoMusicaTocando, placarTempoAtual, placarTempoRestante;
     private ImageView imgPreview, imgNext;
 
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
 
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_tela02);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.iddrawer), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.linearFilho2), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -86,6 +98,37 @@ public class Tela02 extends AppCompatActivity implements MediaPlayer.OnCompletio
 
         placarTempoAtual = findViewById(R.id.textView4);
         placarTempoRestante = findViewById(R.id.textView3);
+
+        drawerLayout = findViewById(R.id.iddrawer3);
+        navigationView = findViewById(R.id.navigationView2);
+
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.idhome){
+                    drawerLayout.closeDrawers();
+                    startActivity(new Intent(Tela02.this, TelaHome.class));
+                    return false;
+                }
+                if (menuItem.getItemId() == R.id.idtela02){
+                    drawerLayout.closeDrawers();
+                    return true;
+                }
+                if (menuItem.getItemId() == R.id.idtela03){
+                    drawerLayout.closeDrawers();
+                    startActivity(new Intent(Tela02.this, Tela03.class));
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
+
+
 
 
     }
